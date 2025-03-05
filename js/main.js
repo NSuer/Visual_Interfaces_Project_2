@@ -1,6 +1,6 @@
 
 
-d3.csv('data/MyData.csv')
+d3.csv('data/Data.csv')
 	.then(data => {
 		//process the data 
 		console.log(data);
