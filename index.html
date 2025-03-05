@@ -5,19 +5,38 @@
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
     <link rel="stylesheet" href="css/leaflet.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 90%;
+            margin-bottom: 20px;
+        }
+        #my-timeline {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <div id="my-map"></div>
+    <div class="container">
+        <div id="my-map"></div>
+    </div>
+    <div class="container">
+        <div id="my-timeline"></div>
+    </div>
     
     <script src="js/d3.v6.min.js"></script>
     <script src="js/leaflet.js"></script>
-
-
     <script src="js/main.js"></script>
     <script src="js/leafletMap.js"></script>
+    <script src="js/timeline.js"></script>
 
     <div id="tooltip"></div>
-
-
 </body>
 </html>
