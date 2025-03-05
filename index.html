@@ -1,168 +1,23 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Temp Title</title>
-    <meta charset="UTF-8">
+    <title>Interactive map with Leaflet</title>
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
+    <link rel="stylesheet" href="css/leaflet.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-    <!-- Title area -->
-    <header>
-        <h1>Temp Title</h1>
-        <h2>By: Nathan Suer, ..., .....</h2>
-    </header>
-
-    <!-- Directions section -->
-    <section class="directions">
-        <h3>Directions</h3>
-
-    </section>
-
+    <div id="my-map"></div>
     
-
-    <!-- Dropdown section -->
-    <section class="dropdown-section">
-
-    </section>
-
-    <!-- Main content area -->
-    <main>
-        <div class="chart-container">
-            <div class="chart">
-
-            </div>
-            <div class="chart">
-
-            </div>
-        </div>
-        <div class="chart-container">
-            <div class="chart">
-
-            </div>
-        </div>
-        <div class="chart-container">
-            <div class="chart">
-
-            </div>
-            <div class="chart">
-
-            </div>
-        </div>
-    </main>
-
-    <!-- Data sources section -->
-    <section class="data-sources">
-       
-    </section>
-
-    <!-- D3 bundle -->
     <script src="js/d3.v6.min.js"></script>
+    <script src="js/leaflet.js"></script>
 
-    <!-- Our JS code - INCLUDING the new files-->
+
     <script src="js/main.js"></script>
+    <script src="js/leafletMap.js"></script>
+
+    <div id="tooltip"></div>
+
 
 </body>
-
 </html>
-
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        background-color: #f9f9f9;
-        color: #333;
-    }
-
-    header {
-        text-align: center;
-        padding: 20px;
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    h1 {
-        margin: 0;
-        font-size: 2em;
-    }
-
-    h2 {
-        margin: 0;
-        font-size: 1.2em;
-        font-weight: normal;
-    }
-
-    section {
-        padding: 20px;
-        margin: 20px 0;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .directions, .data-sources, .dropdown-section {
-        max-width: 800px;
-        margin: 20px auto;
-        width: 100%;
-    }
-
-    .chart-container {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 20px;
-        width: 100%;
-    }
-
-    .chart {
-        flex: 1;
-        margin: 0 10px;
-        text-align: center;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        align-items: center;
-    }
-
-    svg {
-        width: 100%;
-        height: 300px;
-    }
-
-    select {
-        margin-top: 10px;
-        padding: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-
-    a {
-        color: #4CAF50;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-    .histogram {
-        width: 100%;
-        height: 500px;
-    }
-
-    .scatterplot {
-        width: 100%;
-        height: 500px;
-    }
-
-    .chloropleth {
-        width: 100%;
-        height: 500px;
-    }
-</style>
