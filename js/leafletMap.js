@@ -27,13 +27,15 @@ class LeafletMap {
   initVis() {
     let vis = this;
 
-    // Initialize map and layers (same as before)
-    vis.esriUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-    vis.esriAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-    vis.base_layer = L.tileLayer(vis.esriUrl, {
-      id: 'esri-image',
-      attribution: vis.esriAttr,
-      ext: 'png'
+    // Initialize map and layers
+
+    vis.stadiaUrl = 'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}';
+    vis.stadiaAttr = '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    vis.base_layer = L.tileLayer(vis.stadiaUrl, {
+      minZoom: 0,
+      maxZoom: 20,
+      attribution: vis.stadiaAttr,
+      ext: 'jpg'
     });
 
     vis.theMap = L.map('my-map', {
