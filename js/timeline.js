@@ -2,18 +2,18 @@ class Timeline {
 
     constructor(_config, _data) {
         this.config = {
-          parentElement: _config.parentElement,
+            parentElement: _config.parentElement,
         }
         this.data = _data;
         this.initVis();
-      }
+    }
 
     initVis() {
         let vis = this;
 
         vis.width = d3.select(vis.config.parentElement).node().getBoundingClientRect().width;
         vis.height = d3.select(vis.config.parentElement).node().getBoundingClientRect().height;
-        vis.margin = {top: 20, right: 20, bottom: 20, left: 20};    
+        vis.margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
         vis.svg = d3.select(vis.config.parentElement).append('svg')
             .attr('width', vis.width + vis.margin.left + vis.margin.right)
@@ -62,16 +62,16 @@ class Timeline {
             .attr('cy', d => vis.y(d.mag))
             .attr('r', 3)
             .attr('fill', 'steelblue')
-            .on('mouseover', function(event, d) {
+            .on('mouseover', function (event, d) {
                 d3.select(this).transition()
-                  .duration(150)
-                  .attr("fill", "red")
-                  .attr("r", 5);
+                    .duration(150)
+                    .attr("fill", "red")
+                    .attr("r", 5);
 
                 d3.select('#tooltip')
-                  .style('opacity', 1)
-                  .style('z-index', 1000000)
-                  .html(`<div class="tooltip-label">
+                    .style('opacity', 1)
+                    .style('z-index', 1000000)
+                    .html(`<div class="tooltip-label">
                       Time: ${d.time}<br>
                       Latitude: ${d.latitude}<br>
                       Longitude: ${d.longitude}<br>
@@ -82,14 +82,14 @@ class Timeline {
             })
             .on('mousemove', (event) => {
                 d3.select('#tooltip')
-                 .style('left', (event.pageX + 10) + 'px')   
-                  .style('top', (event.pageY + 10) + 'px');
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY + 10) + 'px');
             })
-            .on('mouseleave', function() {
+            .on('mouseleave', function () {
                 d3.select(this).transition()
-                  .duration(150)
-                  .attr("fill", "steelblue")
-                  .attr("r", 3);
+                    .duration(150)
+                    .attr("fill", "steelblue")
+                    .attr("r", 3);
 
                 d3.select('#tooltip').style('opacity', 0);
             });

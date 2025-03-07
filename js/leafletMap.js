@@ -13,7 +13,7 @@ class LeafletMap {
 
   groupDataByMonth(data) {
     /// first order data by time
-    data = data.sort((a,b) => new Date(a.time) - new Date(b.time));
+    data = data.sort((a, b) => new Date(a.time) - new Date(b.time));
     // Next get the earliest and latest month
     let startDate = new Date(data[0].time);
     let endDate = new Date(data[data.length - 1].time);
@@ -42,9 +42,9 @@ class LeafletMap {
       layers: [vis.base_layer]
     });
 
-    vis.colorScale = d3.scaleSequential(d3.interpolateOranges).domain([0,10]);
+    vis.colorScale = d3.scaleSequential(d3.interpolateOranges).domain([0, 10]);
 
-    L.svg({clickable:true}).addTo(vis.theMap);
+    L.svg({ clickable: true }).addTo(vis.theMap);
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane);
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto");
 
@@ -52,10 +52,10 @@ class LeafletMap {
       .data(vis.data)
       .join('circle')
       .attr("fill", d => vis.colorScale(d.mag))
-      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).x)
+      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).y)
       .attr("r", 3)
-      .on('mouseover', function(event,d) {
+      .on('mouseover', function (event, d) {
         d3.select(this).transition()
           .duration('150')
           .attr("stroke", "red")
@@ -73,13 +73,13 @@ class LeafletMap {
               Magnitude: ${d.mag}<br>
               Place: ${d.place}
             </div>`);
-        })
+      })
       .on('mousemove', (event) => {
         d3.select('#tooltip')
-         .style('left', (event.pageX + 10) + 'px')   
+          .style('left', (event.pageX + 10) + 'px')
           .style('top', (event.pageY + 10) + 'px');
-       })              
-      .on('mouseleave', function() {
+      })
+      .on('mouseleave', function () {
         d3.select(this).transition()
           .duration('150')
           .attr("stroke", "none")
@@ -87,9 +87,9 @@ class LeafletMap {
           .attr('r', 3);
 
         d3.select('#tooltip').style('opacity', 0);
-        });
+      });
 
-    vis.theMap.on("zoomend", function(){
+    vis.theMap.on("zoomend", function () {
       vis.updateVis();
     });
 
@@ -121,10 +121,10 @@ class LeafletMap {
       .data(currentData)
       .join('circle')
       .attr("fill", d => vis.colorScale(d.mag))
-      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).x)
+      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).y)
       .attr("r", 3)
-      .on('mouseover', function(event,d) {
+      .on('mouseover', function (event, d) {
         d3.select(this).transition()
           .duration('150')
           .attr("stroke", "red")
@@ -142,13 +142,13 @@ class LeafletMap {
               Magnitude: ${d.mag}<br>
               Place: ${d.place}
             </div>`);
-        })
+      })
       .on('mousemove', (event) => {
         d3.select('#tooltip')
-         .style('left', (event.pageX + 10) + 'px')   
+          .style('left', (event.pageX + 10) + 'px')
           .style('top', (event.pageY + 10) + 'px');
-       })              
-      .on('mouseleave', function() {
+      })
+      .on('mouseleave', function () {
         d3.select(this).transition()
           .duration('150')
           .attr("stroke", "none")
@@ -156,7 +156,7 @@ class LeafletMap {
           .attr('r', 3);
 
         d3.select('#tooltip').style('opacity', 0);
-        });
+      });
 
     document.getElementById('current-time-label').innerText = vis.groupedDataByMonth[vis.currentIndex] ? vis.groupedDataByMonth[vis.currentIndex][0].toLocaleString('default', { month: 'long', year: 'numeric' }) : 'No Data';
   }
