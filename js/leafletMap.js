@@ -1,42 +1,35 @@
 class LeafletMap {
 
-  /**
-   * Class constructor with basic configuration
-   * @param {Object}
-   * @param {Array}
-   */
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
     }
     this.data = _data;
+    this.groupedDataByMonth = this.groupDataByMonth(_data);
     this.initVis();
+    this.startDate = new Date(this.groupedDataByMonth[0][0]);
+    this.endDate = new Date(this.groupedDataByMonth[this.groupedDataByMonth.length - 1][0]);
   }
-  
-  /**
-   * We initialize scales/axes and append static elements, such as axis titles.
-   */
+
+  groupDataByMonth(data) {
+    /// first order data by time
+    data = data.sort((a,b) => new Date(a.time) - new Date(b.time));
+    // Next get the earliest and latest month
+    let startDate = new Date(data[0].time);
+    let endDate = new Date(data[data.length - 1].time);
+    // Create an array of months between the two dates
+    let months = d3.timeMonths(startDate, endDate);
+    // Create a 2D array where each element is a month and the data is all the earthquakes in that month
+    let groupedDataByMonth = months.map(month => [month, data.filter(d => d3.timeMonth(new Date(d.time)).getTime() === month.getTime())]);
+    return groupedDataByMonth;
+  }
+
   initVis() {
     let vis = this;
 
-
-    //ESRI
+    // Initialize map and layers (same as before)
     vis.esriUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
     vis.esriAttr = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-
-    //TOPO
-    vis.topoUrl ='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
-    vis.topoAttr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-
-    //Thunderforest Outdoors- requires key... so meh... 
-    vis.thOutUrl = 'https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}';
-    vis.thOutAttr = '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-    //Stamen Terrain
-    vis.stUrl = 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}';
-    vis.stAttr = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-
-    //this is the base map layer, where we are showing the map background
     vis.base_layer = L.tileLayer(vis.esriUrl, {
       id: 'esri-image',
       attribution: vis.esriAttr,
@@ -49,86 +42,144 @@ class LeafletMap {
       layers: [vis.base_layer]
     });
 
-    // Make a color scale based on magnitude 0-10 with a gradient
     vis.colorScale = d3.scaleSequential(d3.interpolateOranges).domain([0,10]);
 
-    //if you stopped here, you would just have a map
+    L.svg({clickable:true}).addTo(vis.theMap);
+    vis.overlay = d3.select(vis.theMap.getPanes().overlayPane);
+    vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto");
 
-    //initialize svg for d3 to add to map
-    L.svg({clickable:true}).addTo(vis.theMap)// we have to make the svg layer clickable
-    vis.overlay = d3.select(vis.theMap.getPanes().overlayPane)
-    vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto")    
-
-    //these are earthquake data points
     vis.Dots = vis.svg.selectAll('circle')
-            .data(vis.data) 
-            .join('circle')
-              .attr("fill", d => vis.colorScale(d.mag))
-              .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
-              .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y) 
-              .attr("r", d => 3)  // --- TO DO- want to make radius proportional to earthquake size? 
-              .on('mouseover', function(event,d) {
-                d3.select(this).transition()
-                  .duration('150')
-                  .attr("stroke", "red")
-                  .attr("stroke-width", 2)
-                  .attr('r', 4);
+      .data(vis.data)
+      .join('circle')
+      .attr("fill", d => vis.colorScale(d.mag))
+      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
+      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
+      .attr("r", 3)
+      .on('mouseover', function(event,d) {
+        d3.select(this).transition()
+          .duration('150')
+          .attr("stroke", "red")
+          .attr("stroke-width", 2)
+          .attr('r', 4);
 
-                d3.select('#tooltip')
-                  .style('opacity', 1)
-                  .style('z-index', 1000000)
-                  .html(`<div class="tooltip-label">
-                      Time: ${d.time}<br>
-                      Latitude: ${d.latitude}<br>
-                      Longitude: ${d.longitude}<br>
-                      Depth: ${d.depth}<br>
-                      Magnitude: ${d.mag}<br>
-                      Place: ${d.place}
-                    </div>`);
-                })
-              .on('mousemove', (event) => {
-                d3.select('#tooltip')
-                 .style('left', (event.pageX + 10) + 'px')   
-                  .style('top', (event.pageY + 10) + 'px');
-               })              
-              .on('mouseleave', function() {
-                d3.select(this).transition()
-                  .duration('150')
-                  .attr("stroke", "none")
-                  .attr("stroke-width", 0)
-                  .attr('r', 3);
+        d3.select('#tooltip')
+          .style('opacity', 1)
+          .style('z-index', 1000000)
+          .html(`<div class="tooltip-label">
+              Time: ${d.time}<br>
+              Latitude: ${d.latitude}<br>
+              Longitude: ${d.longitude}<br>
+              Depth: ${d.depth}<br>
+              Magnitude: ${d.mag}<br>
+              Place: ${d.place}
+            </div>`);
+        })
+      .on('mousemove', (event) => {
+        d3.select('#tooltip')
+         .style('left', (event.pageX + 10) + 'px')   
+          .style('top', (event.pageY + 10) + 'px');
+       })              
+      .on('mouseleave', function() {
+        d3.select(this).transition()
+          .duration('150')
+          .attr("stroke", "none")
+          .attr("stroke-width", 0)
+          .attr('r', 3);
 
-                d3.select('#tooltip').style('opacity', 0);
-                });
-    
+        d3.select('#tooltip').style('opacity', 0);
+        });
+
     vis.theMap.on("zoomend", function(){
       vis.updateVis();
     });
 
+    // Animation controls
+    vis.currentIndex = 0;
+    vis.isAnimating = false;
+    vis.animationRate = 1000;
+
+    document.getElementById('start-animation').addEventListener('click', () => vis.startAnimation());
+    document.getElementById('stop-animation').addEventListener('click', () => vis.stopAnimation());
+    document.getElementById('rate').addEventListener('change', (event) => {
+      vis.animationRate = 1000 / +event.target.value;
+    });
+
+    document.getElementById('time-slider').addEventListener('input', (event) => {
+      vis.currentIndex = +event.target.value;
+      vis.updateVis();
+    });
+
+    vis.updateVis();
   }
 
   updateVis() {
     let vis = this;
 
-    //want to see how zoomed in you are? 
-    // console.log(vis.map.getZoom()); //how zoomed am I?
-    //----- maybe you want to use the zoom level as a basis for changing the size of the points... ?
-    
-   
-   //redraw based on new zoom- need to recalculate on-screen position
-    vis.Dots
+    let currentData = vis.groupedDataByMonth[vis.currentIndex] ? vis.groupedDataByMonth[vis.currentIndex][1] : [];
+
+    vis.Dots = vis.svg.selectAll('circle')
+      .data(currentData)
+      .join('circle')
+      .attr("fill", d => vis.colorScale(d.mag))
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude,d.longitude]).y)
-      .attr("fill", d => vis.colorScale(d.mag))
-      .attr("r", 3) ; 
+      .attr("r", 3)
+      .on('mouseover', function(event,d) {
+        d3.select(this).transition()
+          .duration('150')
+          .attr("stroke", "red")
+          .attr("stroke-width", 2)
+          .attr('r', 4);
 
+        d3.select('#tooltip')
+          .style('opacity', 1)
+          .style('z-index', 1000000)
+          .html(`<div class="tooltip-label">
+              Time: ${d.time}<br>
+              Latitude: ${d.latitude}<br>
+              Longitude: ${d.longitude}<br>
+              Depth: ${d.depth}<br>
+              Magnitude: ${d.mag}<br>
+              Place: ${d.place}
+            </div>`);
+        })
+      .on('mousemove', (event) => {
+        d3.select('#tooltip')
+         .style('left', (event.pageX + 10) + 'px')   
+          .style('top', (event.pageY + 10) + 'px');
+       })              
+      .on('mouseleave', function() {
+        d3.select(this).transition()
+          .duration('150')
+          .attr("stroke", "none")
+          .attr("stroke-width", 0)
+          .attr('r', 3);
+
+        d3.select('#tooltip').style('opacity', 0);
+        });
+
+    document.getElementById('current-time-label').innerText = vis.groupedDataByMonth[vis.currentIndex] ? vis.groupedDataByMonth[vis.currentIndex][0].toLocaleString('default', { month: 'long', year: 'numeric' }) : 'No Data';
   }
 
-
-  renderVis() {
+  startAnimation() {
     let vis = this;
+    vis.isAnimating = true;
+    vis.animate();
+  }
 
-    //not using right now... 
- 
+  stopAnimation() {
+    let vis = this;
+    vis.isAnimating = false;
+  }
+
+  animate() {
+    let vis = this;
+    if (!vis.isAnimating) return;
+
+    vis.currentIndex = (vis.currentIndex + 1) % vis.groupedDataByMonth.length;
+    document.getElementById('time-slider').value = vis.currentIndex;
+    vis.updateVis();
+
+    setTimeout(() => vis.animate(), vis.animationRate);
   }
 }

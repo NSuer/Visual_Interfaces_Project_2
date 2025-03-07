@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Interactive map with Leaflet</title>
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
@@ -13,24 +14,46 @@
             flex-direction: column;
             align-items: center;
         }
+
         .container {
             width: 90%;
             margin-bottom: 20px;
         }
+
         #my-timeline {
             height: 600px;
             width: 100%;
         }
+
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div id="my-map"></div>
+        <div class="control-panel">
+            <div style="overflow-y: auto; max-height: 200px;">
+                <label for="current-time">Current Time:</label>
+                <span id="current-time-label"></span>
+                <input type="range" id="time-slider" min="0" max="300" value="0">
+                <label for="rate">Rate (ms):</label>
+                <input type="number" id="rate" value="1000">
+                <button id="start-animation">Start Animation</button>
+                <button id="stop-animation">Stop Animation</button>
+            </div>
+        </div>
+
     </div>
     <div class="container">
         <div id="my-timeline"></div>
     </div>
-    
+
     <script src="js/d3.v6.min.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="js/main.js"></script>
@@ -39,4 +62,5 @@
 
     <div id="tooltip"></div>
 </body>
+
 </html>
