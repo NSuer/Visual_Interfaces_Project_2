@@ -16,7 +16,7 @@ class WavePlot {
         this.direction = _config.direction;
 		this.stepSize = _config.stepSize;
 		this.flipY = _config.flipY;
-
+		this.tooltipString = _config.tooltipString;
 		this.initVis();
 	}
 
@@ -130,7 +130,7 @@ class WavePlot {
 			.attr('cy', d => vis.yScale(d[1]) + 40)
             .attr('r', 3);
 
-		vis.circles.on('mousemove', (event, d) => {
+		vis.circles.on('mouseover', (event, d) => {
 			console.log("mouse over bar plot! ");
 			console.log(d);
 			console.log(event);
@@ -139,11 +139,18 @@ class WavePlot {
 				.style('opacity', 1)
 				.style('z-index', 1000000)
 				.html(`<div class="tooltip-label">
-					
+					${vis.tooltipString} ${d[0]}<br>
+					Number of Quakes: ${d[1]}<br>
 				</div>`);
 		})
+
+		.on('mousemove', (event) => {
+			d3.select('#tooltip')
+				.style('left', (event.pageX + 10) + 'px')
+				.style('top', (event.pageY + 10) + 'px');
+		})
 		.on('mouseleave', () => {
-			d3.select('#tooltip').style('display', 'none');
+			d3.select('#tooltip').style('opacity', 0);
 		});
 	}
 

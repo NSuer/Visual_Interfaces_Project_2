@@ -28,7 +28,8 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
       xAxisLabel: 'Quake Magnitude (converted)',
       chartTitle: 'Distribution of Quakes by Magnitude',
       stepSize: 0.1,
-      flipY: false
+      flipY: false,
+      tooltipString: 'Magnitude (converted): '
     }, data)
 
     // magnitude waveplot
@@ -39,7 +40,8 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
       xAxisLabel: 'Quake Depth (km)',
       chartTitle: 'Distribution of Quakes by Depth',
       stepSize: 1,
-      flipY: false
+      flipY: false,
+      tooltipString: 'Depth (km): '
     }, data)
 
     timeline = new Timeline({ parentElement: '#my-timeline'}, data);
