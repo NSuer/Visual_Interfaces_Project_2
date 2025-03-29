@@ -3,7 +3,9 @@ class Timeline {
     constructor(_config, _data) {
         this.config = {
             parentElement: _config.parentElement,
+            contextHeight: 50,
         }
+        this.keyMetric = _config.keyMetric;
         this.data = _data;
         this.initVis();
     }
@@ -30,15 +32,15 @@ class Timeline {
         vis.xAxis = d3.axisBottom(vis.x);
         vis.yAxis = d3.axisLeft(vis.y);
 
-        vis.svg.append('g')
+        vis.chart = vis.svg.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(0,${vis.height})`);
 
         vis.svg.append('g')
             .attr('class', 'y-axis');
 
-        console.log('Initialized visualization');
-        vis.updateVis();
+            console.log('Initialized visualization');
+            vis.updateVis();
     }
 
     updateVis() {

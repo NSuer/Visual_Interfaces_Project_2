@@ -1,4 +1,5 @@
 class WavePlot {
+	
 
 	constructor(_config, _data) {
 		this.config = {
@@ -8,6 +9,7 @@ class WavePlot {
 			margin: { top: 40, right: 50, bottom: 80, left: 70 }
 		}
 
+		this.originData = _data;
 		this.data = _data;
 		this.barColor = _config.barColor;
 		this.keyMetric = _config.keyMetric;
@@ -17,12 +19,17 @@ class WavePlot {
 		this.stepSize = _config.stepSize;
 		this.flipY = _config.flipY;
 		this.tooltipString = _config.tooltipString;
+		this.xScaleSlot = _config.xScaleSlot;
+		this.id = _config.id;
 		this.initVis();
 	}
 
 	initVis() {
 
 		let vis = this;
+
+
+		vis.xScale = null;
 
 		console.log(vis.data)
 
@@ -66,6 +73,21 @@ class WavePlot {
 			.style("text-decoration", "underline")  
 			.text(vis.titleText);
 
+		// create brush (for x dim)
+		const brush = d3.brushX()
+			.extent([[0, 0], [vis.width, vis.height]])
+			.on('brush', function({selection}){
+				if (selection) vis.brushed(selection)
+			})
+			.on('end', function({selection}){
+				if (!selection) vis.brushed(null)
+			});
+
+		// append brush to canvas
+		const brushG = vis.chart.append('g')
+			.attr('class', 'brush x-brush')
+			.call(brush);
+		
 		vis.updateVis()
 	}
 
@@ -128,10 +150,9 @@ class WavePlot {
 			.attr('class', 'circle')
 			.attr('cx', d => vis.xScale(d[0]) + 80)
 			.attr('cy', d => vis.yScale(d[1]) + 40)
-            .attr('r', 3);
+            .attr('r', 3)
 
 		vis.circles.on('mouseover', (event, d) => {
-			console.log("mouse over bar plot! ");
 			console.log(d);
 			console.log(event);
 
@@ -144,7 +165,8 @@ class WavePlot {
 				</div>`);
 		})
 
-		.on('mousemove', (event) => {
+
+		vis.circles.on('mousemove', (event) => {
 			d3.select('#tooltip')
 				.style('left', (event.pageX + 10) + 'px')
 				.style('top', (event.pageY + 10) + 'px');
@@ -153,5 +175,26 @@ class WavePlot {
 			d3.select('#tooltip').style('opacity', 0);
 		});
 	}
+
+	renderVis() {
+		
+	}
+
+	brushed(selection) {
+		let vis = this
+
+		if (selection) {
+			const selectedDomain = selection.map(vis.xScale.invert, vis.xScale); // why is vis.xScale not in scope?
+			console.log(selectedDomain)
+			// Do something with the new selection
+			// ...
+			// we need to filter out all data points that aren't in this selection, then update all visualizations.
+			console.log(filteredData)
+			updateFilters(vis.keyMetric, selectedDomain);
+
+		}
+	}
+	
+	
 
 }

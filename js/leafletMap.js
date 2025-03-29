@@ -111,6 +111,17 @@ class LeafletMap {
       vis.updateVis();
     });
 
+    // create brush (for x and y dims)
+    const brush = d3.brush()
+      .extent([[0, 0], [vis.width, vis.height]])
+      .on('brush', vis.brushed)
+      .on('end', vis.brushended);
+
+    // append brush to canvas
+    const brushG = vis.svg.append('g')
+      .attr('class', 'brush x-brush')
+      .call(brush);
+
     vis.updateVis();
   }
 
@@ -184,4 +195,24 @@ class LeafletMap {
 
     setTimeout(() => vis.animate(), vis.animationRate);
   }
+
+  brushed({selection}) {
+		let vis = this
+
+		if (selection) {
+			const selectedDomain = selection.map(vis.xScale.invert, vis.xScale); // why is vis.xScale not in scope?
+			// Do something with the new selection
+			// ...
+		}
+	}
+
+	brushended({selection}) {
+		let vis = this
+
+		if (!selection) {
+			// Brush has been removed
+			// Probably we want to reset other views afterwards
+			// ...
+		}
+	}
 }
