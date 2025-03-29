@@ -17,7 +17,6 @@ class WavePlot {
 		this.titleText = _config.chartTitle;
         this.direction = _config.direction;
 		this.stepSize = _config.stepSize;
-		this.flipY = _config.flipY;
 		this.tooltipString = _config.tooltipString;
 		this.xScaleSlot = _config.xScaleSlot;
 		this.id = _config.id;
@@ -27,11 +26,6 @@ class WavePlot {
 	initVis() {
 
 		let vis = this;
-
-
-		vis.xScale = null;
-
-		console.log(vis.data)
 
 		// Width and height mark the inner dimensions of the chart area
 		vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
@@ -104,7 +98,7 @@ class WavePlot {
 		console.log("called updateVis")
 		let vis = this
 
-		// determine distribution of the current dataset (with filter applied upstream)
+		// determine distribution of the current dataset (with filter applied upstream), along keyMetric.
 		let aggrData = []
 		let xRange = d3.extent(vis.data, d => d[vis.keyMetric])
 		console.log("Current xRange: " + xRange)
@@ -116,16 +110,12 @@ class WavePlot {
 			targetXValue = +(targetXValue.toFixed(1))
 		}
 
-		console.log(aggrData)
-
 		// x scale: magnitude or depth (continuous between two extremes)
 		vis.xScale = d3.scaleLinear()
 			.domain(d3.extent(vis.data, d => d[vis.keyMetric]))
 			.range([0, vis.width]);
-		//	.paddingInner(0.15);
 
-		// y scale: # of quakes at a given converted intensity (precision 0.0)
-
+		// y scale: # of quakes at a given x value
 		let yRange = null
 		if (vis.flipY){
 			yRange = [0, vis.height]
@@ -150,6 +140,7 @@ class WavePlot {
 			.attr('cy', d => vis.yScale(d[1]) + 40)
             .attr('r', 3)
 
+		// show tooltip
 		vis.circles.on('mouseover', (event, d) => {
 			console.log(d);
 			console.log(event);
@@ -163,7 +154,7 @@ class WavePlot {
 				</div>`);
 		})
 
-
+		// move and kill tooltip
 		vis.circles.on('mousemove', (event) => {
 			d3.select('#tooltip')
 				.style('left', (event.pageX + 10) + 'px')
@@ -173,25 +164,22 @@ class WavePlot {
 			d3.select('#tooltip').style('opacity', 0);
 		});
 
+		// adjust axes to new data.
 		vis.xAxisGroup.call(xAxis)
 		vis.yAxisGroup.call(yAxis)
 	}
 
+	// callback for brush
 	brushed(selection) {
 		let vis = this
 
 		if (selection) {
-			const selectedDomain = selection.map(vis.xScale.invert, vis.xScale); // why is vis.xScale not in scope?
-			console.log(selectedDomain)
-			// Do something with the new selection
-			// ...
-			// we need to filter out all data points that aren't in this selection, then update all visualizations.
-			console.log(filteredData)
-			updateFilters(vis.keyMetric, selectedDomain);
+			const selectedDomain = selection.map(vis.xScale.invert, vis.xScale); 
+			//console.log(selectedDomain)
 
+			// we need to filter out all data points that aren't in this selection, then update all visualizations.
+			//console.log(filteredData)
+			updateFilters(vis.keyMetric, selectedDomain);
 		}
 	}
-	
-	
-
 }
