@@ -83,6 +83,14 @@ class WavePlot {
 				if (!selection) vis.brushed(null)
 			});
 
+		// create, draw empty axes
+		vis.xAxisGroup = vis.chart.append('g')
+			.attr('class', 'axis x-axis')
+			.attr('transform', `translate(0, ${vis.height})`)
+
+		vis.yAxisGroup = vis.chart.append('g')
+			.attr('class', 'axis y-axis')
+
 		// append brush to canvas
 		const brushG = vis.chart.append('g')
 			.attr('class', 'brush x-brush')
@@ -132,16 +140,6 @@ class WavePlot {
 		const xAxis = d3.axisBottom(vis.xScale)
 		const yAxis = d3.axisLeft(vis.yScale)
 
-		// Draw the axis (move xAxis to the bottom with 'translate')
-		const xAxisGroup = vis.chart.append('g')
-			.attr('class', 'axis x-axis')
-			.attr('transform', `translate(0, ${vis.height})`)
-			.call(xAxis);
-
-		const yAxisGroup = vis.chart.append('g')
-			.attr('class', 'axis y-axis')
-			.call(yAxis);
-
 		// Add dots
 		vis.circles = vis.svg.selectAll('circle')
 			.data(aggrData)
@@ -174,10 +172,9 @@ class WavePlot {
 		.on('mouseleave', () => {
 			d3.select('#tooltip').style('opacity', 0);
 		});
-	}
 
-	renderVis() {
-		
+		vis.xAxisGroup.call(xAxis)
+		vis.yAxisGroup.call(yAxis)
 	}
 
 	brushed(selection) {
