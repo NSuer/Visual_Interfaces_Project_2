@@ -3,11 +3,7 @@ let originData = null;
 let filteredData = null;
 let filterSet = []
 
-let magPlot = null;
-let depthPlot = null;
-let timeline = null;
-
-
+let plotSet = []
 
 d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2024-2025.csv'
 .then(data => {
@@ -29,7 +25,7 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
     leafletMap = new LeafletMap({ parentElement: '#my-map'}, data);
 
     // magnitude waveplot
-    magPlot = new WavePlot({
+    let magPlot = new WavePlot({
       parentElement: '#my-barchart',
       barColor: 'FireBrick',
       keyMetric: 'mag',
@@ -40,7 +36,7 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
     }, data)
 
     // depth waveplot
-    depthPlot = new WavePlot({
+    let depthPlot = new WavePlot({
       parentElement: '#my-barchart',
       barColor: 'DarkMagenta',
       keyMetric: 'depth',
@@ -50,33 +46,23 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
       tooltipString: 'Depth (km): '
     }, data)
 
-    newTimeline = new TimeWavePlot({
-      parentElement: '#my-barchart',
+    let newTimeline = new TimeWavePlot({
+      parentElement: '#my-timeline',
       barColor: 'SteelBlue',
       keyMetric: 'time',
       xAxisLabel: 'Date',
       chartTitle: 'Timeline'
     }, data)
 
-    timeline = new Timeline({ 
-      parentElement: '#my-timeline',
-      keyMetric: 'time'
-
-    }, data);
-
-    //focusTimeline = new FocusTimeline({parentElement: '#my-focus-timeline'}, data);
-
+    plotSet.push(magPlot)
+    plotSet.push(depthPlot)
+    plotSet.push(newTimeline)
 
   })
   .catch(error => console.error(error));
 
 
 function updateFilters(metric, filterRange){
-  console.log("okiyasu! it's updateFilters!")
-  console.log("oi josuke! my metric is ")
-  console.log(metric)
-  console.log("and the new range is")
-  console.log(filterRange)
 
   let newFilter = true
 
@@ -93,82 +79,43 @@ function updateFilters(metric, filterRange){
     filterSet.push([metric, filterRange])
   }
 
-  console.log("dio... i have the new filter set...")
-  console.log(filterSet)
+  //console.log("dio... i have the new filter set...")
+  //console.log(filterSet)
 
-  // FOR magPlot:
+  let count = 0;
 
-  // assign to filteredData the result of filtering data with each filter that wasn't this vis's keyMetric.
-  filteredData = originData;
+  // for each created plot
+  while (count < plotSet.length) {
+    let currPlot = plotSet[count]
 
-  for (const filter of filterSet) {
-    if (filter[0] != magPlot.keyMetric){
-      // cast to date objects if required
-      if (filter[0] == "time"){
-        filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
+    // assign to filteredData the result of filtering data with each filter that wasn't this vis's keyMetric.
+    filteredData = originData;
+
+    // for each filter applied by a plot
+    for (const filter of filterSet) {
+      // each plot shouldn't filter on itself
+      if (filter[0] != currPlot.keyMetric) {
+
+        // filter data to current domain
+        if (filter[0] == "time"){
+          // cast to date objects if required
+          filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
+        } else {
+          filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+        }
+
+        //console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
       } else {
-        filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+        //console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")
       }
-
-      console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
-    }else {
-      console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")
     }
+    //console.log("and let it be recorded in the Library of Ptolemy that the filtered data rests as such:")
+    //console.log(filteredData)
+
+    // write filtered dataset out to plot, make it update on that. 
+    currPlot.data = filteredData;
+    currPlot.updateVis()
+
+    count ++
   }
-  console.log("and let it be recorded in the Library of Ptolemy that the filtered data rests as such:")
-  console.log(filteredData)
-
-  magPlot.data = filteredData;
-  magPlot.updateVis()
-
-  // FOR depthPlot:
-
-  // assign to filteredData the result of filtering data with each filter that wasn't this vis's keyMetric.
-  filteredData = originData;
-
-  for (const filter of filterSet) {
-    if (filter[0] != depthPlot.keyMetric){
-      // cast to date objects if required
-      if (filter[0] == "time"){
-        filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
-      } else {
-        filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
-      }
-
-      console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
-    }else {
-      console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")
-    }
-  }
-  console.log("and let it be recorded in the Library of Ptolemy that the filtered data rests as such:")
-  console.log(filteredData)
-
-  depthPlot.data = filteredData;
-  depthPlot.updateVis()
-
-    // FOR timeline:
-
-  // assign to filteredData the result of filtering data with each filter that wasn't this vis's keyMetric.
-  filteredData = originData;
-
-  for (const filter of filterSet) {
-    if (filter[0] != newTimeline.keyMetric){
-      // cast to date objects if required
-      if (filter[0] == "time"){
-        filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
-      } else {
-        filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
-      }
-
-      console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
-    }else {
-      console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")
-    }
-  }
-  console.log("and let it be recorded in the Library of Ptolemy that the filtered data rests as such:")
-  console.log(filteredData)
-
-  newTimeline.data = filteredData;
-  newTimeline.updateVis()
-
 }
