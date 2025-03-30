@@ -36,8 +36,7 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
       xAxisLabel: 'Quake Magnitude (converted)',
       chartTitle: 'Distribution of Quakes by Magnitude',
       stepSize: 0.1,
-      tooltipString: 'Magnitude (converted): ',
-      xScaleSlot: 0,
+      tooltipString: 'Magnitude (converted): '
     }, data)
 
     // depth waveplot
@@ -48,8 +47,15 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
       xAxisLabel: 'Quake Depth (km)',
       chartTitle: 'Distribution of Quakes by Depth',
       stepSize: 1,
-      tooltipString: 'Depth (km): ',
-      xScaleSlot: 1
+      tooltipString: 'Depth (km): '
+    }, data)
+
+    newTimeline = new TimeWavePlot({
+      parentElement: '#my-barchart',
+      barColor: 'SteelBlue',
+      keyMetric: 'time',
+      xAxisLabel: 'Date',
+      chartTitle: 'Timeline'
     }, data)
 
     timeline = new Timeline({ 
@@ -63,6 +69,7 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
 
   })
   .catch(error => console.error(error));
+
 
 function updateFilters(metric, filterRange){
   console.log("okiyasu! it's updateFilters!")
@@ -96,7 +103,13 @@ function updateFilters(metric, filterRange){
 
   for (const filter of filterSet) {
     if (filter[0] != magPlot.keyMetric){
-      filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+      // cast to date objects if required
+      if (filter[0] == "time"){
+        filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
+      } else {
+        filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+      }
+
       console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
     }else {
       console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")

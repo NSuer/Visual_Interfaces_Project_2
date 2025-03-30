@@ -1,4 +1,4 @@
-class WavePlot {
+class TimeWavePlot {
 	
 
 	constructor(_config, _data) {
@@ -18,6 +18,8 @@ class WavePlot {
         this.direction = _config.direction;
 		this.stepSize = _config.stepSize;
 		this.tooltipString = _config.tooltipString;
+		this.xScaleSlot = _config.xScaleSlot;
+		this.xType = _config.xType;
 		this.id = _config.id;
 		this.initVis();
 	}
@@ -55,7 +57,7 @@ class WavePlot {
 			.attr("transform", "rotate(-90)")
 			.attr("y", -vis.config.margin.left + 20)
 			.attr("x", -vis.config.margin.top - 100)
-			.text("# Of Quakes")
+			.text("Magnitude")
 
 		// chart title
 		vis.chart.append("text")
@@ -97,32 +99,18 @@ class WavePlot {
 		console.log("called updateVis")
 		let vis = this
 
-		// determine distribution of the current dataset (with filter applied upstream), along keyMetric.
-		let aggrData = []
-		let xRange = d3.extent(vis.data, d => d[vis.keyMetric])
-		console.log("Current xRange: " + xRange)
+		vis.filteredData = vis.data.filter(d => d.time && d.mag);
 
-		let targetXValue = xRange[0]
-		while (targetXValue <= xRange[1]) {
-			aggrData.push([targetXValue, d3.filter(vis.data, (d) => d[vis.keyMetric] == targetXValue).length])
-			targetXValue += this.stepSize
-			targetXValue = +(targetXValue.toFixed(1))
-		}
-
-		// x scale: magnitude or depth (continuous between two extremes)
-		vis.xScale = d3.scaleLinear()
-			.domain(d3.extent(vis.data, d => d[vis.keyMetric]))
+		// x scale: time
+		vis.xScale = d3.scaleTime()
+			.domain(d3.extent(vis.filteredData, d => new Date(d.time)))
 			.range([0, vis.width]);
 
-		// y scale: # of quakes at a given x value
-		let yRange = null
-		if (vis.flipY){
-			yRange = [0, vis.height]
-		} else {
-			yRange = [vis.height, 0]
-		}
+		// y scale: mag
+		let yRange = [vis.height, 0]
+
 		vis.yScale = d3.scaleLinear()
-			.domain([0, d3.max(aggrData, d => d[1])])
+			.domain([3, d3.max(vis.filteredData, d => d.mag)])
 			.range(yRange);
 
 		// Initialize axes
@@ -131,12 +119,12 @@ class WavePlot {
 
 		// Add dots
 		vis.circles = vis.svg.selectAll('circle')
-			.data(aggrData)
+			.data(vis.filteredData)
 			.join('circle')
 			.attr('fill', vis.barColor)
 			.attr('class', 'circle')
-			.attr('cx', d => vis.xScale(d[0]) + 80)
-			.attr('cy', d => vis.yScale(d[1]) + 40)
+            .attr('cx', d => vis.xScale(new Date(d.time)) + 70)
+            .attr('cy', d => vis.yScale(d.mag) + 40)
             .attr('r', 3)
 
 		// show tooltip
@@ -148,9 +136,13 @@ class WavePlot {
 				.style('opacity', 1)
 				.style('z-index', 1000000)
 				.html(`<div class="tooltip-label">
-					${vis.tooltipString} ${d[0]}<br>
-					Number of Quakes: ${d[1]}<br>
-				</div>`);
+					Time: ${d.time}<br>
+					Latitude: ${d.latitude}<br>
+					Longitude: ${d.longitude}<br>
+					Depth: ${d.depth}<br>
+					Magnitude: ${d.mag}<br>
+					Place: ${d.place}
+				  </div>`);
 		})
 
 		// move and kill tooltip
@@ -166,6 +158,7 @@ class WavePlot {
 		// adjust axes to new data.
 		vis.xAxisGroup.call(xAxis)
 		vis.yAxisGroup.call(yAxis)
+
 	}
 
 	// callback for brush
