@@ -128,7 +128,13 @@ function updateFilters(metric, filterRange){
 
   for (const filter of filterSet) {
     if (filter[0] != depthPlot.keyMetric){
-      filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+      // cast to date objects if required
+      if (filter[0] == "time"){
+        filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
+      } else {
+        filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+      }
+
       console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
     }else {
       console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")
@@ -139,5 +145,30 @@ function updateFilters(metric, filterRange){
 
   depthPlot.data = filteredData;
   depthPlot.updateVis()
+
+    // FOR timeline:
+
+  // assign to filteredData the result of filtering data with each filter that wasn't this vis's keyMetric.
+  filteredData = originData;
+
+  for (const filter of filterSet) {
+    if (filter[0] != newTimeline.keyMetric){
+      // cast to date objects if required
+      if (filter[0] == "time"){
+        filteredData = filteredData.filter(d => new Date(d[filter[0]]) >= filter[1][0] && new Date(d[filter[0]]) <= filter[1][1])
+      } else {
+        filteredData = filteredData.filter(d => d[filter[0]] >= filter[1][0] && d[filter[0]] <= filter[1][1])
+      }
+
+      console.log("and lo! the data was indeed filtered such that member " + filter[0] + " may lie only betwixt " + filter[1][0] + " and " + filter[1][1] + "!")
+    }else {
+      console.log("our regent saw this attempt to filter on " + filter[0] + " and with the Emperor's sword did put a stop to it.")
+    }
+  }
+  console.log("and let it be recorded in the Library of Ptolemy that the filtered data rests as such:")
+  console.log(filteredData)
+
+  newTimeline.data = filteredData;
+  newTimeline.updateVis()
 
 }
