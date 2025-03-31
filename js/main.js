@@ -4,6 +4,7 @@ let filteredData = null;
 let filterSet = []
 
 let plotSet = []
+let brushSet = []
 
 d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2024-2025.csv'
 .then(data => {
@@ -58,6 +59,7 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
     plotSet.push(depthPlot)
     plotSet.push(newTimeline)
 
+    document.getElementById('reset-filters').addEventListener('click', () => resetFilters());
   })
   .catch(error => console.error(error));
 
@@ -116,6 +118,31 @@ function updateFilters(metric, filterRange){
     currPlot.data = filteredData;
     currPlot.updateVis()
 
+    count ++
+  }
+}
+
+function resetFilters() {
+
+  console.log("filters, I command thee... reset!")
+  
+  // destroy all filters on the logical side
+  filterSet = []
+
+  // reset all visual brush elements
+  let count = 0
+  while (count < brushSet.length) {
+    let currBrush = brushSet[count]
+    currBrush.call(d3.brush().clear)
+    count ++
+  }
+
+  // set all plots to their full dataset
+  count = 0
+  while (count < plotSet.length) {
+    let currPlot = plotSet[count]
+    currPlot.data = originData;
+    currPlot.updateVis()
     count ++
   }
 }
