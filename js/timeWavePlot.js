@@ -4,7 +4,7 @@ class TimeWavePlot {
 	constructor(_config, _data) {
 		this.config = {
 			parentElement: _config.parentElement,
-			containerWidth: _config.containerWidth || 500,
+			containerWidth: _config.containerWidth || 1100,
 			containerHeight: _config.containerHeight || 500,
 			margin: { top: 40, right: 50, bottom: 80, left: 70 }
 		}
@@ -47,7 +47,7 @@ class TimeWavePlot {
 		// Add X axis label:
 		vis.chart.append("text")
 			.attr("text-anchor", "end")
-			.attr("x", vis.width / 2 + vis.config.margin.left + 20)
+			.attr("x", vis.width / 2 + vis.config.margin.left - 50)
 			.attr("y", vis.height + vis.config.margin.top)
 			.text(vis.xAxisLabel);
 
@@ -55,9 +55,9 @@ class TimeWavePlot {
 		vis.chart.append("text")
 			.attr("text-anchor", "end")
 			.attr("transform", "rotate(-90)")
-			.attr("y", -vis.config.margin.left + 20)
-			.attr("x", -vis.config.margin.top - 100)
-			.text("Magnitude")
+			.attr("y", -vis.config.margin.left + 30)
+			.attr("x", -vis.config.margin.top - 80)
+			.text("Magnitude (Converted)")
 
 		// chart title
 		vis.chart.append("text")
