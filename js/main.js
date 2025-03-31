@@ -23,7 +23,10 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
     });
 
     // Initialize chart and then show it
-    leafletMap = new LeafletMap({ parentElement: '#my-map'}, data);
+    leafletMap = new LeafletMap({ 
+      parentElement: '#my-map',
+      keyMetric: 'place'
+    }, data);
 
     // magnitude waveplot
     let magPlot = new WavePlot({
@@ -58,6 +61,7 @@ d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2
     plotSet.push(magPlot)
     plotSet.push(depthPlot)
     plotSet.push(newTimeline)
+    plotSet.push(leafletMap)
 
     document.getElementById('reset-filters').addEventListener('click', () => resetFilters());
   })

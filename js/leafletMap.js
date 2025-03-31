@@ -5,6 +5,7 @@ class LeafletMap {
       parentElement: _config.parentElement,
     }
     this.data = _data;
+    this.keyMetric = _config.keyMetric;
     this.groupedDataByMonth = this.groupDataByMonth(_data);
     this.initVis();
     this.startDate = new Date(this.groupedDataByMonth[0][0]);
@@ -75,6 +76,8 @@ class LeafletMap {
 
   updateVis() {
     let vis = this;
+    console.log("called updateVis in leaflet")
+    vis.groupedDataByMonth = vis.groupDataByMonth(vis.data);
 
     let currentData = vis.groupedDataByMonth[vis.currentIndex] ? vis.groupedDataByMonth[vis.currentIndex][1] : [];
 
