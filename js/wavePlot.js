@@ -88,7 +88,8 @@ class WavePlot {
 		const brushG = vis.chart.append('g')
 			.attr('class', 'brush x-brush')
 			.call(brush);
-		
+
+		brushSet.push(brushG)
 		vis.updateVis()
 	}
 

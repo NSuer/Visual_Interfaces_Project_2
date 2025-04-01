@@ -5,6 +5,7 @@ class LeafletMap {
       parentElement: _config.parentElement,
     }
     this.data = _data;
+    this.keyMetric = _config.keyMetric;
     this.groupedDataByMonth = this.groupDataByMonth(_data);
     this.initVis();
     this.startDate = new Date(this.groupedDataByMonth[0][0]);
@@ -50,47 +51,6 @@ class LeafletMap {
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane);
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto");
 
-    vis.Dots = vis.svg.selectAll('circle')
-      .data(vis.data)
-      .join('circle')
-      .attr("fill", d => vis.colorScale(d.mag))
-      .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).x)
-      .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).y)
-      .attr("r", 3)
-      .on('mouseover', function (event, d) {
-        d3.select(this).transition()
-          .duration('150')
-          .attr("stroke", "red")
-          .attr("stroke-width", 2)
-          .attr('r', 4);
-
-        d3.select('#tooltip')
-          .style('opacity', 1)
-          .style('z-index', 1000000)
-          .html(`<div class="tooltip-label">
-              Time: ${d.time}<br>
-              Latitude: ${d.latitude}<br>
-              Longitude: ${d.longitude}<br>
-              Depth: ${d.depth}<br>
-              Magnitude: ${d.mag}<br>
-              Place: ${d.place}
-            </div>`);
-      })
-      .on('mousemove', (event) => {
-        d3.select('#tooltip')
-          .style('left', (event.pageX + 10) + 'px')
-          .style('top', (event.pageY + 10) + 'px');
-      })
-      .on('mouseleave', function () {
-        d3.select(this).transition()
-          .duration('150')
-          .attr("stroke", "none")
-          .attr("stroke-width", 0)
-          .attr('r', 3);
-
-        d3.select('#tooltip').style('opacity', 0);
-      });
-
     vis.theMap.on("zoomend", function () {
       vis.updateVis();
     });
@@ -111,22 +71,13 @@ class LeafletMap {
       vis.updateVis();
     });
 
-    // create brush (for x and y dims)
-    const brush = d3.brush()
-      .extent([[0, 0], [vis.width, vis.height]])
-      .on('brush', vis.brushed)
-      .on('end', vis.brushended);
-
-    // append brush to canvas
-    const brushG = vis.svg.append('g')
-      .attr('class', 'brush x-brush')
-      .call(brush);
-
     vis.updateVis();
   }
 
   updateVis() {
     let vis = this;
+    console.log("called updateVis in leaflet")
+    vis.groupedDataByMonth = vis.groupDataByMonth(vis.data);
 
     let currentData = vis.groupedDataByMonth[vis.currentIndex] ? vis.groupedDataByMonth[vis.currentIndex][1] : [];
 
@@ -196,24 +147,4 @@ class LeafletMap {
 
     setTimeout(() => vis.animate(), vis.animationRate);
   }
-
-  brushed({selection}) {
-		let vis = this
-
-		if (selection) {
-			const selectedDomain = selection.map(vis.xScale.invert, vis.xScale); // why is vis.xScale not in scope?
-			// Do something with the new selection
-			// ...
-		}
-	}
-
-	brushended({selection}) {
-		let vis = this
-
-		if (!selection) {
-			// Brush has been removed
-			// Probably we want to reset other views afterwards
-			// ...
-		}
-	}
 }
