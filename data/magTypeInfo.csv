@@ -1,0 +1,14 @@
+magType,Measurement,Scale,Region,Usage
+,,,,,
+mb,Moment Body Wave�,M4.0/4.5~6.5,Global,"Used in global seismicity for which there is no mww, mwc, mwv, or mwr for ranges 4.0-5.5 range."
+mb_lg,Moment Surface Wave,<M4.0,Central and Eastern US,Regional Earthquakes measured on short-period instruments. Authoritative for situations with no moment or mb.
+mc,Magnitude of Completeness,M3.0~4.0,-,Minimum degree of complete measurement. Last resort.
+md,Magnitude Duration,-,Global,Used for events where only small magnitudes are available or clipped waveforms due to limited recording range and an inability to id the peaks of the wave.
+ml,Richter-Gutenberg Local,<M4.0,"Global, with priority in the UC and Canada",Original magnitude relationship. Authoritative in small events� for which there is no mb or moment.
+mlr,Richter-Gutenberg Local Revised,<M4.0,Global,Adjusted form of the ml with a more modern calculation based on a plug-in.
+mlv,Richter-Gutenberg Local Vertical,<M4.0,Global,Adjusted form of the ml where calculation is conducted based on verticality.
+mww,Moment W-Phase,M~4.5,Global,W-Phase computation for all global quakes M5.0 and larger. Consistent down to 4.5 with strong broadband.
+mwb,Moment W-Phase Body Wave,<M5.5,Global,Moment W-Phase calculation adjusted for body waves.
+mwc,Moment W-Phase Centroid,M6.0,Global,Moment W-Phase calculation adjusted for centroid of long-period surface waves.
+mwr,Moment W-Phase Regional,M3.5~M5.0,Global,Moment W-Phase computed at regional distances.
+

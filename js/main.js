@@ -1,10 +1,49 @@
-
 let originData = null;
 let filteredData = null;
 let filterSet = []
 
 let plotSet = []
 let brushSet = []
+
+d3.csv('data/magTypeInfo.csv')
+  .then(data => {
+    console.log("number of items: " + data.length);
+
+    // Extract magType values
+    const magTypes = data.map(d => d.magType);
+
+    // Initialize the dropdown menu
+    const dropdown = d3.select("#dropdown");
+
+    dropdown
+      .selectAll("option")
+      .data(magTypes)
+      .enter()
+      .append("option")
+      .attr("value", d => d)
+      .text(d => d);
+
+    // Set the default value to the first option
+    dropdown.property("value", magTypes[0]);
+
+    // Initialize the displayed values with the first magType
+    updateDisplayedValues(data[0]);
+
+    // Add an event listener to update the displayed values when a new option is selected
+    dropdown.on("change", function () {
+      const selectedMagType = this.value;
+      const selectedData = data.find(d => d.magType === selectedMagType);
+      updateDisplayedValues(selectedData);
+    });
+  })
+  .catch(error => console.error(error));
+
+// Function to update the displayed values
+function updateDisplayedValues(selectedData) {
+  d3.select("#type-range").text(selectedData.Scale || "N/A");
+  d3.select("#metric-value").text(selectedData.Measurement || "N/A");
+  d3.select("#usage-value").text(selectedData.Usage || "N/A");
+}
 
 d3.csv('data/Data.csv')  //**** TO DO  switch this to loading the quakes 'data/2024-2025.csv'
 .then(data => {

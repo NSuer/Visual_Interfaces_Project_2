@@ -31,6 +31,13 @@
             align-items: center;
             margin-top: 20px;
         }
+
+        #dropdown-menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -49,7 +56,26 @@
                 <button id="reset-filters">Reset Plot Filters</button>
             </div>
         </div>
-
+        <div class="control-panel" id="dropdown-menu">
+            <div id="type-display" style="overflow-y: auto; max-height: 200px;">
+                <p>
+                    <label for="dropdown-select">Select Magnitude Type:</label>
+                    <select id="dropdown"></select>
+                </p>
+                <p>
+                    <label for="range">Typical Range:</label>
+                    <span id="type-range"></span>
+                </p>
+                <p>
+                    <label for="metric">Metric for Measurement:</label>
+                    <span id="metric-value"></span>
+                </p> 
+                <p>
+                    <label for="usage">Use Case:</label>
+                    <span id="usage-value"></span>
+                </p>
+            </div>  
+        </div>
     </div>
 
     <div class="container">

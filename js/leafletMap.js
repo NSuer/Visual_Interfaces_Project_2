@@ -46,12 +46,21 @@ class LeafletMap {
     });
 
     vis.colorScale = d3.scaleSequential(d3.interpolateOranges).domain([0, 10]);
+    vis.typeColor = d3.scaleSequential(d3.interpolateBlues).domain([0, 10]);
 
     L.svg({ clickable: true }).addTo(vis.theMap);
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane);
     vis.svg = vis.overlay.select('svg').attr("pointer-events", "auto");
 
     vis.theMap.on("zoomend", function () {
+      vis.updateVis();
+    });
+
+    // Mag Type Controls
+    vis.targetMag = "";
+
+    document.getElementById('dropdown').addEventListener('change', (event) => {
+      vis.targetMag = event.target.value;
       vis.updateVis();
     });
 
@@ -84,43 +93,43 @@ class LeafletMap {
     vis.Dots = vis.svg.selectAll('circle')
       .data(currentData)
       .join('circle')
-      .attr("fill", d => vis.colorScale(d.mag))
+      .attr("fill", d => d.magType === vis.targetMag ? vis.typeColor(d.mag) : vis.colorScale(d.mag))
       .attr("cx", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).x)
       .attr("cy", d => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).y)
       .attr("r", 3)
       .on('mouseover', function (event, d) {
-        d3.select(this).transition()
-          .duration('150')
-          .attr("stroke", "red")
-          .attr("stroke-width", 2)
-          .attr('r', 4);
+      d3.select(this).transition()
+        .duration('150')
+        .attr("stroke", "red")
+        .attr("stroke-width", 2)
+        .attr('r', 4);
 
-        d3.select('#tooltip')
-          .style('opacity', 1)
-          .style('z-index', 1000000)
-          .html(`<div class="tooltip-label">
-              Time: ${d.time}<br>
-              Latitude: ${d.latitude}<br>
-              Longitude: ${d.longitude}<br>
-              Depth: ${d.depth}<br>
-              Magnitude: ${d.mag}<br>
-              Magtype: ${d.magType}<br>
-              Place: ${d.place}
-            </div>`);
+      d3.select('#tooltip')
+        .style('opacity', 1)
+        .style('z-index', 1000000)
+        .html(`<div class="tooltip-label">
+          Time: ${d.time}<br>
+          Latitude: ${d.latitude}<br>
+          Longitude: ${d.longitude}<br>
+          Depth: ${d.depth}<br>
+          Magnitude: ${d.mag}<br>
+          Mag Type: ${d.magType}<br>
+          Place: ${d.place}
+        </div>`);
       })
       .on('mousemove', (event) => {
-        d3.select('#tooltip')
-          .style('left', (event.pageX + 10) + 'px')
-          .style('top', (event.pageY + 10) + 'px');
+      d3.select('#tooltip')
+        .style('left', (event.pageX + 10) + 'px')
+        .style('top', (event.pageY + 10) + 'px');
       })
       .on('mouseleave', function () {
-        d3.select(this).transition()
-          .duration('150')
-          .attr("stroke", "none")
-          .attr("stroke-width", 0)
-          .attr('r', 3);
+      d3.select(this).transition()
+        .duration('150')
+        .attr("stroke", "none")
+        .attr("stroke-width", 0)
+        .attr('r', 3);
 
-        d3.select('#tooltip').style('opacity', 0);
+      d3.select('#tooltip').style('opacity', 0);
       });
 
     document.getElementById('current-time-label').innerText = vis.groupedDataByMonth[vis.currentIndex] ? vis.groupedDataByMonth[vis.currentIndex][0].toLocaleString('default', { month: 'long', year: 'numeric' }) : 'No Data';
