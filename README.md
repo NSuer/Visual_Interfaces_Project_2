@@ -91,4 +91,5 @@ https://nsuer.github.io/Visual_Interfaces_Project_2/
 Some of us use github copilot when we program. This is used more as an autocomplete tool rather than asking it to write code for us.
 
 ## Demo Video
-Check out our personal webpages for this. 
+https://youtu.be/QYEi9XjDjh8
+This is also on our personal webpages.
