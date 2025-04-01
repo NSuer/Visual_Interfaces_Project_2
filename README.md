@@ -1,4 +1,4 @@
-# Visual_Interfaces_Project_1
+# Visual_Interfaces_Project_2
 Nathan Suer, Caleb Copley, and Ryan Williams
 
 Link to hosted project: https://nsuer.github.io/Visual_Interfaces_Project_2/
