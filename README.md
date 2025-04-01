@@ -17,8 +17,7 @@ Original data: https://earthquake.usgs.gov/earthquakes/search/
 
 Preprocessed data: https://drive.google.com/file/d/1MuwynEs8_aVwW4o9q7eF1emQWI7Sdl9G/view?usp=sharing
 
-## Visualization Components
-
+## Visualization Components and design justifications
 
 ### Map
 The main component of our project is the map. The map shows the location of each seismic event. The map is interactive, you can zoom in and out, and you can hover over a circle to see more information about the event. The color of the circle represents the magnitude of the event. We used a sequential color scheme for the magnitude. This means that the lower the magnitude the lighter the color will be and the higher the magnitude the darker the color will be. We did this because we wanted to show the severity of the event and a sequential color scheme for a scale from 0-10 makes it easy for the user to undestand.
