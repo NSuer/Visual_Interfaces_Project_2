@@ -30,8 +30,8 @@ class LeafletMap {
 
     // Initialize map and layers
 
-    vis.stadiaUrl = 'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}';
-    vis.stadiaAttr = '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    vis.stadiaUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+    vis.stadiaAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributor';
     vis.base_layer = L.tileLayer(vis.stadiaUrl, {
       minZoom: 0,
       maxZoom: 20,
