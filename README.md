@@ -26,13 +26,11 @@ The main component of our project is the map. The map shows the location of each
 Another part of the map is that it animates over time. We have a sliding bar selecting a specific month to view the seismic activity of. We also have start and stop animation buttons and an input to choose the speed of the animation. The input is in milliseconds, and it controls how fast one month goes by, so the lower the number, the faster the animation.
 
 The map does not have a brush to add a filter based on geolocation, however it does respect filters set by other plots.
-![Map](images\Map.png)
 
 ### Scatter Plot - Visualize number of earthquakes over time
 The scatterplots are a secondary component of the application that allows the user to more easily visualize the earthquake statistics without needing to comb through the map over time. The user is capable of hovering over circles that allow them to figure out what that point on the graph means. This is mainly added for an increase in insight and clarity on the users end.
 
 There are three specific plots to consider. One shows the user the magnitude distributions. Another shows them the depth distributions. The final is an overall timeline showing what quakes happened when and the user, armed with the ability to hover, is able to get insights on the earthquake after identifying which they want to learn more about after seeing what point in time it occurred.
-![Plots](images\Plots.png)
 
 ### Level 3 goals
 Level 3 introduces two scatter plots to visualize the quake distribution over magnitude and depth. 
@@ -59,8 +57,6 @@ Level 6 seeks to add more meaning to one of the more ambiguous data points: magT
 
 ## What the application allows you to discover
 The application of our map is focused around education and the disclosure of the relationship between the different magnitude types. Earthquakes are measured via different scales that means different things about an earthquake. These things, however, are typically not very civilian friendly. Our map should allow a user to identify the relationship between earthquakes, the scale used, and the varying factors that helped determine that scale. For example, the screenshot below focuses on the mb_lg scale. One only used in central and eastern america. The graph shows off where it is used and how often. As seen below, the purple marks exclusively appear in the east, showing the user that the scale is a localized scale rather than a universal one.
-
-![Observation](images\LearnScreen.png)
 
 ## Process
 
