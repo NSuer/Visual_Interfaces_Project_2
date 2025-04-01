@@ -153,6 +153,7 @@ class LeafletMap {
               Longitude: ${d.longitude}<br>
               Depth: ${d.depth}<br>
               Magnitude: ${d.mag}<br>
+              Magtype: ${d.magType}<br>
               Place: ${d.place}
             </div>`);
       })

@@ -11,11 +11,11 @@ The motivation for this project is to allow the general public to better underst
 ## Data
 The data comes from the US Geological Survey website. We chose to focus on the US, We beleive there is too much data to focus on the whole world. The data is on siesmic activity, which includes earthquakes, explosions, and anything else that causes trembling in the earth. We chose to do from 2000 to 2024. We chose this time frame because we wanted to see how the number of earthquakes has changed over our lifetime. The key data for each earthquake is the time it occured, longitude, latitude, depth, magnitude, desription of place, and type of seismic activity (earthquake, explosion, etc.). We did notice that the data on magnitude was not all in the same units ......
 
-TODO Caleb - add description of how you fixed up the data
+For the preprocessing, the magTypes were scattered and non-uniform so certain points of data needed a reliability check. Most data was considered reliable but a number of changes were made overall. There were two data points, both recorded in California with magTypes that did not line up with the USGS. One was missing the magType. The other had a magType of ma which was undocumented. A number of the magTypes were also consolidated. The magTypes mlg and mblg were both consolidated with mb_lg since they are synonymous. The magType ml(texnet) was consolidated to ml because texnet is actually a data station used to collect the info. Finally, based off of the magnitude values and the prefix "mw", mw was consolidated to mwr because the authoritative range for mww (the standard choice) was out of scope for the ranges mw pointed to.
 
 Original data: https://earthquake.usgs.gov/earthquakes/search/
 
-Preprocessed data: TODO Caleb - add link to preprocessed data
+Preprocessed data: https://drive.google.com/file/d/1MuwynEs8_aVwW4o9q7eF1emQWI7Sdl9G/view?usp=sharing
 
 ## Visualization Components
 TODO - Add screenshots of each component
@@ -40,7 +40,7 @@ TODO Ryan
 TODO Ryan TODO Caleb
 
 ## Level 6 goals
-TODO Ryan TODO Caleb TODO Nate
+Level 6 seeks to add more meaning to one of the more ambiguous data points: magType. The United States Geographical Service goes into a lot of detail on the calculation, authorization, and implementation of the different magnitude types so I believe that it is an interesting piece of data that can offer people insight as to what that parameter means. As such, I added the MagType to the mouseover effect and implemented a grouping mechanism that highlights all data points of a specific magType when the feature is selected.   
 
 ## What the application allows you to discover
 TODO Anyone - add a few sentences about what the application allows you to discover and a screenshot of it
