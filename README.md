@@ -22,11 +22,11 @@ TODO - Add screenshots of each component
 <!-- Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  -->
 
 ### Map
-TODO Ryan TODO Caleb  - double check this and add details from level 4 goals
+The main component of our project is the map. The map shows the location of each seismic event. The map is interactive, you can zoom in and out, and you can hover over a circle to see more information about the event. The color of the circle represents the magnitude of the event. We used a sequential color scheme for the magnitude. This means that the lower the magnitude the lighter the color will be and the higher the magnitude the darker the color will be. We did this because we wanted to show the severity of the event and a sequential color scheme for a scale from 0-10 makes it easy for the user to undestand.
 
-The main component of our project is the map. The map shows the location of each seismic event. The map is interactive, you can zoom in and out, and you can hover over a circle to see more information about the event. The color of the circle represents the magnitude of the event. We used a sequential color scheme for the magnitude. This means that the lower the magnitude the lighter the color will be and the higher the magnitude the darker the color will be. We did this because we wanted to show the severity of the event and a sequential color scheme for a scale from 0-10 makes it easy for the use to undestand.
+Another part of the map is that it animates over time. We have a sliding bar selecting a specific month to view the seismic activity of. We also have start and stop animation buttons and an input to choose the speed of the animation. The input is in milliseconds, and it controls how fast one month goes by, so the lower the number, the faster the animation.
 
-Another part of the map is that it aniomates over time. We have a sliding bar, to allow the user to select a apecific month to view the seismic activity of. We also have start and stop animation buttons and an input to choose the speed of the animation. The input is in milliseconds, and it controls how fast one month goes by, so the lower the number the faster the animation.
+The map does not have a brush to add a filter based on geolocation, however it does respect filters set by other plots.
 
 TODO Ryan TODO Caleb TODO Nate - add screenshot of map
 ![image](Map.png)
@@ -34,12 +34,26 @@ TODO Ryan TODO Caleb TODO Nate - add screenshot of map
 ### Scatter Plot - Visualize number of earthquakes over time
 
 ### Level 3 goals
-TODO Ryan
+Level 3 introduces two scatter plots to visualize the quake distribution over magnitude and depth. 
+
+The first plot describes the distribution of quakes by magnitude. Here, the converted magnitude from preprocessing  for each data point is rounded to the nearest tenth. Then, the number of instances of each rounded magnitude are graphed. 
+
+The second plot describes the distribution of quakes by depth. Here, quake depth is rounded to the nearest kilometer, then the number of instances of each rounded depth are graphed.
+
+Notably, neither of these plots display individual quakes. The map and timeline do that already; these are solely for distribution analysis. 
+
+Tooltips are generated to display the exact number of quakes at the magnitude you're hovering. 
 
 ### Level 4 goals
-TODO Ryan TODO Caleb
+Level 4 gives the user granular control over the ranges of time, magnitude, and depth to display earthquakes within. 
 
-## Level 6 goals
+The dot plots all have brushing functionality, wherein a user can slide and resize a window over top of the plot. Any data points outside that window are excluded from all other plots, including the map. 
+
+These filters stack additively, meaning an earthquake data point must fit all applied filters to be displayed. Conversely, a data point fitting all filters will be displayed on every visualization.
+
+Of course, if the user wishes to clear their filter choices and return to the full dataset, they can click the "Reset Filters" button to do so. Then they can start brushing again. 
+
+### Level 6 goals
 Level 6 seeks to add more meaning to one of the more ambiguous data points: magType. The United States Geographical Service goes into a lot of detail on the calculation, authorization, and implementation of the different magnitude types so I believe that it is an interesting piece of data that can offer people insight as to what that parameter means. As such, I added the MagType to the mouseover effect and implemented a grouping mechanism that highlights all data points of a specific magType when the feature is selected.   
 
 ## What the application allows you to discover
@@ -50,14 +64,16 @@ TODO Anyone - add a few sentences about what the application allows you to disco
 ## Process
 
 ### Libraries
-I only used D3 on the project
-TODO Anyone - add any other libraries used
-
+We included two libraries for this project:
+ - D3: Used to create the plots and their interactive components, like brushes.
+ - Leaflet: Used to create the interactive map of the USA. 
 
 ### Code Structure
-TODO Ryan TODO Caleb - add a few sentences about the code structure. Also I beleive you guys will use the same thiong I used in project 1, so I just have my description form that project below, Double check that it is still accurate.
-
-My code is structured in a fairly normal way, with each graph being it's own file. The only things of note are my use of a variable called "window.selected" which is a variable that is stored in the window so that all of the graphs can access it. This variable is an array of the seismic occurneces that are selected by the brush. I have an event listener that is triggered whenever I change the selected counties. This event listener then updates the other graphs to show the selected counties. 
+Each graph type has its own class, which has its own file. 
+ - wavePlot.js: Base class for the magnitude and depth distribution charts. 
+ - timeWavePlot.js: Base class for the timeline chart. Similar to wavePlot.js, but simpler and with time on the X axis. 
+ - leafletMap.js: Base class for the USA map. 
+ - main.js: Instantiates the above visualizations. Additionally, performs minor data post-processing, and handles filter application and removal.
 
 ### How to access and run
 To access and run the code, you can go to the github repository and download the code. You can then run the code by opening the index.html file in a web browser. You can also access the code by going to the hosted project link.
@@ -71,8 +87,7 @@ https://github.com/NSuer/Visual_Interfaces_Project_2
 https://nsuer.github.io/Visual_Interfaces_Project_2/
 
 ## AI and Collaboration
-- Some of us use github copilot when we program. This is used more as an autocomplete tool rather than asking it to write code for us.
-- TODO Ryan TODO Caleb - Add any other AI tools used
+Some of us use github copilot when we program. This is used more as an autocomplete tool rather than asking it to write code for us.
 
 ## Demo Video
-TODO Ryan TODO Caleb TODO Nate - Add a demo video, probabvly upload to youtube and then link here
+Check out our personal webpages for this. 
