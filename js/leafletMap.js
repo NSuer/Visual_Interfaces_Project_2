@@ -46,7 +46,7 @@ class LeafletMap {
     });
 
     vis.colorScale = d3.scaleSequential(d3.interpolateOranges).domain([0, 10]);
-    vis.typeColor = d3.scaleSequential(d3.interpolateBlues).domain([0, 10]);
+    vis.typeColor = d3.scaleSequential(d3.interpolateGreens).domain([0, 10]);
 
     L.svg({ clickable: true }).addTo(vis.theMap);
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane);
