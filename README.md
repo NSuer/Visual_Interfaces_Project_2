@@ -18,8 +18,7 @@ Original data: https://earthquake.usgs.gov/earthquakes/search/
 Preprocessed data: https://drive.google.com/file/d/1MuwynEs8_aVwW4o9q7eF1emQWI7Sdl9G/view?usp=sharing
 
 ## Visualization Components
-TODO - Add screenshots of each component
-<!-- Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  -->
+
 
 ### Map
 The main component of our project is the map. The map shows the location of each seismic event. The map is interactive, you can zoom in and out, and you can hover over a circle to see more information about the event. The color of the circle represents the magnitude of the event. We used a sequential color scheme for the magnitude. This means that the lower the magnitude the lighter the color will be and the higher the magnitude the darker the color will be. We did this because we wanted to show the severity of the event and a sequential color scheme for a scale from 0-10 makes it easy for the user to undestand.
@@ -27,11 +26,13 @@ The main component of our project is the map. The map shows the location of each
 Another part of the map is that it animates over time. We have a sliding bar selecting a specific month to view the seismic activity of. We also have start and stop animation buttons and an input to choose the speed of the animation. The input is in milliseconds, and it controls how fast one month goes by, so the lower the number, the faster the animation.
 
 The map does not have a brush to add a filter based on geolocation, however it does respect filters set by other plots.
-
-TODO Ryan TODO Caleb TODO Nate - add screenshot of map
-![image](Map.png)
+![Map](images\Map.png)
 
 ### Scatter Plot - Visualize number of earthquakes over time
+The scatterplots are a secondary component of the application that allows the user to more easily visualize the earthquake statistics without needing to comb through the map over time. The user is capable of hovering over circles that allow them to figure out what that point on the graph means. This is mainly added for an increase in insight and clarity on the users end.
+
+There are three specific plots to consider. One shows the user the magnitude distributions. Another shows them the depth distributions. The final is an overall timeline showing what quakes happened when and the user, armed with the ability to hover, is able to get insights on the earthquake after identifying which they want to learn more about after seeing what point in time it occurred.
+![Plots](images\Plots.png)
 
 ### Level 3 goals
 Level 3 introduces two scatter plots to visualize the quake distribution over magnitude and depth. 
@@ -57,9 +58,9 @@ Of course, if the user wishes to clear their filter choices and return to the fu
 Level 6 seeks to add more meaning to one of the more ambiguous data points: magType. The United States Geographical Service goes into a lot of detail on the calculation, authorization, and implementation of the different magnitude types so I believe that it is an interesting piece of data that can offer people insight as to what that parameter means. As such, I added the MagType to the mouseover effect and implemented a grouping mechanism that highlights all data points of a specific magType when the feature is selected.   
 
 ## What the application allows you to discover
-TODO Anyone - add a few sentences about what the application allows you to discover and a screenshot of it
+The application of our map is focused around education and the disclosure of the relationship between the different magnitude types. Earthquakes are measured via different scales that means different things about an earthquake. These things, however, are typically not very civilian friendly. Our map should allow a user to identify the relationship between earthquakes, the scale used, and the varying factors that helped determine that scale. For example, the screenshot below focuses on the mb_lg scale. One only used in central and eastern america. The graph shows off where it is used and how often. As seen below, the purple marks exclusively appear in the east, showing the user that the scale is a localized scale rather than a universal one.
 
-![image](Observation.png)
+![Observation](images\LearnScreen.png)
 
 ## Process
 

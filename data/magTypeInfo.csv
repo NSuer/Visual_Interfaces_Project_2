@@ -1,14 +1,13 @@
 magType,Measurement,Scale,Region,Usage
-,,,,,
-mb,Moment Body Wave�,M4.0/4.5~6.5,Global,"Used in global seismicity for which there is no mww, mwc, mwv, or mwr for ranges 4.0-5.5 range."
-mb_lg,Moment Surface Wave,<M4.0,Central and Eastern US,Regional Earthquakes measured on short-period instruments. Authoritative for situations with no moment or mb.
-mc,Magnitude of Completeness,M3.0~4.0,-,Minimum degree of complete measurement. Last resort.
-md,Magnitude Duration,-,Global,Used for events where only small magnitudes are available or clipped waveforms due to limited recording range and an inability to id the peaks of the wave.
-ml,Richter-Gutenberg Local,<M4.0,"Global, with priority in the UC and Canada",Original magnitude relationship. Authoritative in small events� for which there is no mb or moment.
-mlr,Richter-Gutenberg Local Revised,<M4.0,Global,Adjusted form of the ml with a more modern calculation based on a plug-in.
-mlv,Richter-Gutenberg Local Vertical,<M4.0,Global,Adjusted form of the ml where calculation is conducted based on verticality.
-mww,Moment W-Phase,M~4.5,Global,W-Phase computation for all global quakes M5.0 and larger. Consistent down to 4.5 with strong broadband.
-mwb,Moment W-Phase Body Wave,<M5.5,Global,Moment W-Phase calculation adjusted for body waves.
-mwc,Moment W-Phase Centroid,M6.0,Global,Moment W-Phase calculation adjusted for centroid of long-period surface waves.
-mwr,Moment W-Phase Regional,M3.5~M5.0,Global,Moment W-Phase computed at regional distances.
-
+,,,,
+mb,Short Time Body Wave,4 to 6.5,Global,"Used globally to identify earthquakes based on early P-waves. Authoritative for global readings for which there is no Mww, Mwc, Mwb, or Mwr."
+mb_lg,Short Time Surface Wave,Greater than 4,Central and Eastern US,Regional measurement based on surface waves of smaller events. Only Authoritative for small-scale events in the central and eastern US.
+mc,Magnitude of Completeness,3 to 4,-,Not documented by the US Geological Service. Indication of the minimum magnitude of confident detection in a region.
+md,Duration,-,Global,Scale based on the duration of shaking measured by a seismogram. Used specifically in very small events and situations were wave peaks are clipped and cannot be accurately recounted.
+ml,Richter-Gutenberg Local,Greater than 4,"Global, with priority in the UC and Canada","Original ""Richter Scale"" defined by Richter and Gutenberg. Based on the maximum amplitude of a very specific seismogram. Modern calculations can be used to tune most seismograms to original standards."
+mlr,Richter-Gutenberg Local Revised,Greater than 4,Global,"A ""revised"" Richter Scale adjusted by modern technology and metrcs that more accurately depicts the size of an earthquake."
+mlv,Richter-Gutenberg Local Vertical,Greater than 4,Global,An adjusted Richter Scale that calculates the magnitude by vertical measurements.
+mww,Moment W-Phase,Greater than 4.5,Global,"Generic form of the ""Mw"" scales. Identifies the magnitude of the W-phase, a stable and low amplitude wave that is capable of accurately predicting the scale larger earthquakes very accurately and very quickly."
+mwb,Moment W-Phase Body Wave,Greater than 5.5,Global,An Mw scale that measures a quake based more specifically on long-period body waves. Less accurate and only authoritative when Mww and Mwc are not computed.
+mwc,Moment W-Phase Centroid,Around 6,Global,An Mw scale that measures a quake based more specifically on the geographical center of energey release (the center of mass of an earthquake rupture).
+mwr,Moment W-Phase Regional,3.5 to 5,Global,"An Mw scale that measures a quake based on the moment magnitude, which is derived from the broadband waves at shorter distances. Used for smaller earthquakes and is only authoritative when other Mw scales are not computed."
